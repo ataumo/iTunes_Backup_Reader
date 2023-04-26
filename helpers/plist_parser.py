@@ -8,6 +8,7 @@
 '''
 
 from biplist import *
+import plistlib
 from helpers import writer
 from helpers.structs import sinfHelper, frpdHelper
 import os
@@ -50,7 +51,8 @@ def readApps(apps, info_plist, logger):
 
         iTunesBinaryPlist = app.get('iTunesMetadata', {})
 
-        iTunesPlist = readPlistFromString(iTunesBinaryPlist)
+        #iTunesPlist = readPlistFromString(iTunesBinaryPlist)
+        iTunesPlist = plistlib.loads(iTunesBinaryPlist)
 
         '''Find Apple ID & Purchase Date'''
         downloadInfo = iTunesPlist.get('com.apple.iTunesStore.downloadInfo', {})
@@ -136,9 +138,15 @@ def readPlists(status_plist_path, manifest_plist_path, info_plist_path, logger, 
         status_plist = None
     else:
 
-        status_plist = readPlist(status_plist_path)
-    manifest_plist = readPlist(manifest_plist_path)
-    info_plist = readPlist(info_plist_path)
+        #status_plist = readPlist(status_plist_path)
+        with open(status_plist_path, 'rb') as f:
+            status_plist = plistlib.load(f)
+    #manifest_plist = readPlist(manifest_plist_path)
+    with open(manifest_plist_path, 'rb') as f:
+        manifest_plist = plistlib.load(f)
+    #info_plist = readPlist(info_plist_path)
+    with open(info_plist_path, 'rb') as f:
+        info_plist = plistlib.load(f)
 
 
 
